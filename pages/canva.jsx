@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
-
-const canva = () => {
+const Canva = () => {
   const canvasRef = useRef(null);
   //getting mouse posititon respect to window.
   function setCanvasRef(ref) {
@@ -51,4 +50,4 @@ const canva = () => {
   );
 };
 
-export default canva;
+export default Canva;
