@@ -64,7 +64,7 @@ const CanvasComp = () => {
       const x = e.nativeEvent.offsetX - offsetX;
       const y = e.nativeEvent.offsetY - offsetY;
       setImagePosition({ x, y });
-      //console.log("x:", x, "y:", y);
+      console.log("x:", x, "y:", y);
     }
   };
   const [showPicker, setShowPicker] = useState(false);
