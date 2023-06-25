@@ -3,13 +3,15 @@ import { SketchPicker } from "react-color";
 
 const CanvasComp = () => {
   const canvasRef = useRef(null);
+  const canvas = canvasRef.current;
+
   const [uploadedImage, setUploadedImage] = useState(null);
   const [dragging, setDragging] = useState(false);
   const [resizing, setResizing] = useState(false);
   const [offsetX, setOffsetX] = useState(0);
   const [offsetY, setOffsetY] = useState(0);
   const [imagePosition, setImagePosition] = useState({ x: 0, y: 0 });
-  const [imageSize, setImageSize] = useState({ width: 200, height: 200 });
+  const [imageSize, setImageSize] = useState({ width: 100, height: 100 });
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -139,14 +141,15 @@ const CanvasComp = () => {
 
   return (
     <div
-      className="flex justify-between gap-10 h-screen max-w-[1208px] mx-auto items-center"
+      className="flex justify-between gap-10 h-screen max-w-[1208px] mx-auto items-center "
       onClick={handleParentClick}
     >
       <div className="">
         <canvas
+          className=" rounded-xl"
           ref={canvasRef}
           width={400}
-          height={400}
+          height={260}
           onMouseDown={handleMouseDown}
           onMouseUp={handleMouseUp}
           onMouseMove={handleMouseMove}
