@@ -3,7 +3,7 @@ import { SketchPicker } from "react-color";
 
 const CanvasComp = () => {
   const canvasRef = useRef(null);
-  const canvas = canvasRef.current;
+  //const canvas = canvasRef.current;
 
   const [uploadedImage, setUploadedImage] = useState(null);
   const [dragging, setDragging] = useState(false);
