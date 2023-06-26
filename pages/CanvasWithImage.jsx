@@ -95,17 +95,6 @@ function CanvasWithImage() {
 
   const addText = () => {
     const canvas = canvasInstanceRef.current;
-
-    // Check if there is already an active object on the canvas
-    const existingText = canvas
-      .getObjects()
-      .find((obj) => obj.type === "textbox");
-
-    if (existingText) {
-      // An existing textbox is already on the canvas, do not add another one
-      return;
-    }
-
     const text = new fabric.Textbox("Your Text", {
       left: canvas.getWidth() / 2,
       top: canvas.getHeight() / 2,
@@ -122,7 +111,6 @@ function CanvasWithImage() {
     canvas.setActiveObject(text);
     canvas.renderAll();
   };
-
   const handleTextColorChange = (color) => {
     setTextColor(color.hex);
     const canvas = canvasInstanceRef.current;
@@ -149,6 +137,57 @@ function CanvasWithImage() {
     }
   };
 
+  const deleteImage = () => {
+    const canvas = canvasInstanceRef.current;
+    const fabricImg = fabricImgRef.current;
+
+    if (fabricImg) {
+      canvas.remove(fabricImg);
+      fabricImgRef.current = null;
+      canvas.renderAll();
+    }
+  };
+  const deleteText = () => {
+    const canvas = canvasInstanceRef.current;
+    const activeObject = canvas.getActiveObject();
+
+    if (activeObject && activeObject.type === "textbox") {
+      canvas.remove(activeObject);
+      canvas.discardActiveObject();
+      canvas.renderAll();
+    }
+  };
+  useEffect(() => {
+    // ... existing code ...
+
+    const handleKeyDown = (event) => {
+      if (event.key === "Delete") {
+        deleteActiveObject();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      // ... existing code ...
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+  const deleteActiveObject = () => {
+    const canvas = canvasInstanceRef.current;
+    const activeObject = canvas.getActiveObject();
+
+    if (activeObject) {
+      if (activeObject === fabricImgRef.current) {
+        deleteImage();
+      } else {
+        canvas.remove(activeObject);
+        canvas.discardActiveObject();
+        canvas.renderAll();
+      }
+    }
+  };
+
   return (
     <div
       onClick={(event) => {
@@ -157,6 +196,15 @@ function CanvasWithImage() {
       }}
       className=""
     >
+      <div className="flex gap-5">
+        <button className="bg-red-500 text-white" onClick={deleteImage}>
+          Delete Image
+        </button>
+        <button className="bg-red-500 text-white" onClick={deleteText}>
+          Delete Text
+        </button>
+      </div>
+
       <div
         className=""
         style={{
