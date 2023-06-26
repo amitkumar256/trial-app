@@ -17,6 +17,7 @@ function CanvasWithImage() {
   };
 
   const colorPickerRef = useRef();
+  const textPickerRef = useRef();
 
   const handleParentClick = (event) => {
     if (
@@ -25,6 +26,14 @@ function CanvasWithImage() {
         !colorPickerRef.current.contains(event.target))
     ) {
       setShowPicker(false);
+    }
+  };
+  const handleTextClick = (e) => {
+    if (
+      showTextPicker &&
+      (!textPickerRef.current || !textPickerRef.current.contains(e.target))
+    ) {
+      setShowTextPicker(false);
     }
   };
 
@@ -113,9 +122,9 @@ function CanvasWithImage() {
     canvas.setActiveObject(text);
     canvas.renderAll();
   };
+
   const handleTextColorChange = (color) => {
     setTextColor(color.hex);
-
     const canvas = canvasInstanceRef.current;
     const activeObject = canvas.getActiveObject();
 
@@ -127,12 +136,27 @@ function CanvasWithImage() {
       canvas.renderAll();
     }
   };
+
   const handleFontChoiceChange = (event) => {
-    setFontChoice(event.target.value);
+    const newFontChoice = event.target.value;
+    setFontChoice(newFontChoice);
+    const canvas = canvasInstanceRef.current;
+    const activeObject = canvas.getActiveObject();
+
+    if (activeObject && activeObject.type === "textbox") {
+      activeObject.set("fontFamily", newFontChoice);
+      canvas.renderAll();
+    }
   };
 
   return (
-    <div onClick={handleParentClick} className="">
+    <div
+      onClick={(event) => {
+        handleParentClick(event);
+        handleTextClick(event);
+      }}
+      className=""
+    >
       <div
         className=""
         style={{
@@ -171,11 +195,16 @@ function CanvasWithImage() {
             Text Color:
           </label>
           {showTextPicker && (
-            <SketchPicker
-              id="text-color"
-              color={textColor}
-              onChangeComplete={handleTextColorChange}
-            />
+            <div
+              className="absolute right-[250px] bottom-0"
+              ref={textPickerRef}
+            >
+              <SketchPicker
+                id="text-color"
+                color={textColor}
+                onChangeComplete={handleTextColorChange}
+              />
+            </div>
           )}
         </div>
         <div>
