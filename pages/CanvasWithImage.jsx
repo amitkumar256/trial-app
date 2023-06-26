@@ -1,117 +1,135 @@
-// import React, { useRef, useEffect, useState } from "react";
-// import { SketchPicker } from "react-color";
-// import { fabric } from "fabric";
+import React, { useRef, useEffect, useState } from "react";
+import { SketchPicker } from "react-color";
+import { fabric } from "fabric";
 
-// function CanvasWithImage() {
-//   const canvasRef = useRef(null);
-//   let canvas;
-//   let fabricImg;
+function CanvasWithImage() {
+  const canvasRef = useRef(null);
+  const fabricImgRef = useRef(null);
+  const canvasInstanceRef = useRef(null);
+  const [showPicker, setShowPicker] = useState(false);
+  const [cardColor, setCardColor] = useState("#ffffff");
+  const handleChangeComplete = (color) => {
+    setCardColor(color.hex);
+  };
 
-//   const handleImageUpload = (event) => {
-//     const file = event.target.files[0];
-//     const reader = new FileReader();
+  const colorPickerRef = useRef();
 
-//     reader.onload = () => {
-//       const imgData = reader.result;
+  const handleParentClick = (event) => {
+    if (
+      showPicker &&
+      (!colorPickerRef.current ||
+        !colorPickerRef.current.contains(event.target))
+    ) {
+      setShowPicker(false);
+    }
+  };
 
-//       fabric.Image.fromURL(imgData, (img) => {
-//         if (fabricImg) {
-//           canvas.remove(fabricImg);
-//         }
+  useEffect(() => {
+    const canvas = new fabric.Canvas(canvasRef.current, {
+      width: 800,
+      height: 600,
+    });
 
-//         const maxWidth = canvas.getWidth();
-//         const maxHeight = canvas.getHeight();
+    canvasInstanceRef.current = canvas;
 
-//         const aspectRatio = img.width / img.height;
-//         let width = maxWidth;
-//         let height = maxWidth / aspectRatio;
+    return () => {
+      canvas.dispose();
+    };
+  }, []);
 
-//         if (height > maxHeight) {
-//           height = maxHeight;
-//           width = maxHeight * aspectRatio;
-//         }
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
 
-//         fabricImg = img.set({
-//           left: 0,
-//           top: 0,
-//           scaleX: width / img.width,
-//           scaleY: height / img.height,
-//         });
+    reader.onload = () => {
+      const imgData = reader.result;
 
-//         canvas.add(fabricImg);
-//         canvas.renderAll();
-//       });
-//     };
+      fabric.Image.fromURL(imgData, (img) => {
+        const canvas = canvasInstanceRef.current;
 
-//     reader.readAsDataURL(file);
-//   };
+        if (fabricImgRef.current) {
+          canvas.remove(fabricImgRef.current);
+        }
 
-//   useEffect(() => {
-//     canvas = new fabric.Canvas(canvasRef.current, {
-//       width: 800,
-//       height: 600,
-//     });
+        const maxWidth = canvas.getWidth();
+        const maxHeight = canvas.getHeight();
 
-//     return () => {
-//       canvas.dispose();
-//     };
-//   }, []);
-//   const [showPicker, setShowPicker] = useState(false);
-//   const [cardColor, setCardColor] = useState("#000000");
-//   const handleChangeComplete = (color) => {
-//     setCardColor(color.hex);
-//   };
+        const aspectRatio = img.width / img.height;
+        let width = maxWidth;
+        let height = maxWidth / aspectRatio;
 
-//   const colorPickerRef = useRef();
+        if (height > maxHeight) {
+          height = maxHeight;
+          width = maxHeight * aspectRatio;
+        }
 
-//   const handleParentClick = (event) => {
-//     if (
-//       showPicker &&
-//       (!colorPickerRef.current ||
-//         !colorPickerRef.current.contains(event.target))
-//     ) {
-//       setShowPicker(false);
-//     }
-//   };
+        const fabricImg = img.set({
+          left: 0,
+          top: 0,
+          scaleX: width / img.width,
+          scaleY: height / img.height,
+        });
 
-//   return (
-//     <div onClick={handleParentClick}>
-//       <input className="" type="file" onChange={handleImageUpload} />
-//       <button onClick={() => setShowPicker(!showPicker)}>color picker</button>
-//       {showPicker && (
-//         <div className="absolute bottom-0 right-0 " ref={colorPickerRef}>
-//           <SketchPicker
-//             color={cardColor}
-//             onChangeComplete={handleChangeComplete}
-//           />
-//         </div>
-//       )}
-//       <div
-//         style={{
-//           backgroundColor: cardColor,
-//           width: "800px",
-//           height: "600px",
-//           overflow: "hidden", // Hide overflow from the container
-//         }}
-//       >
-//         <canvas
-//           ref={canvasRef}
-//           style={{
-//             position: "absolute", // Position the canvas absolutely within the container
-//             top: "0",
-//             left: "0",
-//           }}
-//         />
-//       </div>
-//     </div>
-//   );
-// }
+        fabricImgRef.current = fabricImg;
 
-// export default CanvasWithImage;
-import React from "react";
+        canvas.add(fabricImg);
+        canvas.renderAll();
+      });
+    };
 
-const CanvasWithImage = () => {
-  return <div>helo</div>;
-};
+    reader.readAsDataURL(file);
+  };
+
+  const addText = () => {
+    const canvas = canvasInstanceRef.current;
+    const text = new fabric.Textbox("Your Text", {
+      left: canvas.getWidth() / 2,
+      top: canvas.getHeight() / 2,
+      fontSize: 20,
+      fill: "#000000",
+      borderColor: "#000000",
+      cornerColor: "#000000",
+      cornerSize: 6,
+      transparentCorners: false,
+    });
+
+    canvas.add(text);
+    canvas.setActiveObject(text);
+    canvas.renderAll();
+  };
+
+  return (
+    <div onClick={handleParentClick}>
+      <input className="" type="file" onChange={handleImageUpload} />
+      <button onClick={() => setShowPicker(!showPicker)}>color picker</button>
+      <button onClick={addText}>Add Text</button>
+      {showPicker && (
+        <div className="absolute bottom-0 right-0 " ref={colorPickerRef}>
+          <SketchPicker
+            color={cardColor}
+            onChangeComplete={handleChangeComplete}
+          />
+        </div>
+      )}
+      <div
+        style={{
+          backgroundColor: cardColor,
+          width: "800px",
+          height: "600px",
+          overflow: "hidden", // Hide overflow from the container
+        }}
+      >
+        <canvas
+          ref={canvasRef}
+          style={{
+            position: "absolute", // Position the canvas absolutely within the container
+            top: "0",
+            left: "0",
+          }}
+        />
+      </div>
+    </div>
+  );
+}
 
 export default CanvasWithImage;
