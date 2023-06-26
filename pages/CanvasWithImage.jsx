@@ -6,7 +6,11 @@ function CanvasWithImage() {
   const canvasRef = useRef(null);
   const fabricImgRef = useRef(null);
   const canvasInstanceRef = useRef(null);
+  const [textColor, setTextColor] = useState("#000000");
+  const [fontChoice, setFontChoice] = useState("Arial");
   const [showPicker, setShowPicker] = useState(false);
+  const [showTextPicker, setShowTextPicker] = useState(false);
+
   const [cardColor, setCardColor] = useState("#ffffff");
   const handleChangeComplete = (color) => {
     setCardColor(color.hex);
@@ -82,13 +86,25 @@ function CanvasWithImage() {
 
   const addText = () => {
     const canvas = canvasInstanceRef.current;
+
+    // Check if there is already an active object on the canvas
+    const existingText = canvas
+      .getObjects()
+      .find((obj) => obj.type === "textbox");
+
+    if (existingText) {
+      // An existing textbox is already on the canvas, do not add another one
+      return;
+    }
+
     const text = new fabric.Textbox("Your Text", {
       left: canvas.getWidth() / 2,
       top: canvas.getHeight() / 2,
       fontSize: 20,
-      fill: "#000000",
-      borderColor: "#000000",
-      cornerColor: "#000000",
+      fill: textColor, // Set text color
+      fontFamily: fontChoice, // Set font family
+      borderColor: textColor, // Set border color
+      cornerColor: textColor, // Set corner color
       cornerSize: 6,
       transparentCorners: false,
     });
@@ -97,21 +113,28 @@ function CanvasWithImage() {
     canvas.setActiveObject(text);
     canvas.renderAll();
   };
+  const handleTextColorChange = (color) => {
+    setTextColor(color.hex);
+
+    const canvas = canvasInstanceRef.current;
+    const activeObject = canvas.getActiveObject();
+
+    if (activeObject && activeObject.type === "textbox") {
+      activeObject.set("fill", color.hex);
+      activeObject.set("borderColor", color.hex);
+      activeObject.set("cornerColor", color.hex);
+
+      canvas.renderAll();
+    }
+  };
+  const handleFontChoiceChange = (event) => {
+    setFontChoice(event.target.value);
+  };
 
   return (
-    <div onClick={handleParentClick}>
-      <input className="" type="file" onChange={handleImageUpload} />
-      <button onClick={() => setShowPicker(!showPicker)}>color picker</button>
-      <button onClick={addText}>Add Text</button>
-      {showPicker && (
-        <div className="absolute bottom-0 right-0 " ref={colorPickerRef}>
-          <SketchPicker
-            color={cardColor}
-            onChangeComplete={handleChangeComplete}
-          />
-        </div>
-      )}
+    <div onClick={handleParentClick} className="">
       <div
+        className=""
         style={{
           backgroundColor: cardColor,
           width: "800px",
@@ -122,11 +145,53 @@ function CanvasWithImage() {
         <canvas
           ref={canvasRef}
           style={{
-            position: "absolute", // Position the canvas absolutely within the container
+            position: "", // Position the canvas absolutely within the container
             top: "0",
             left: "0",
           }}
         />
+      </div>
+      <input className="" type="file" onChange={handleImageUpload} />
+      <button onClick={() => setShowPicker(!showPicker)}>Color Picker</button>
+      <button onClick={addText}>Add Text</button>
+      {showPicker && (
+        <div className="absolute bottom-0 right-0" ref={colorPickerRef}>
+          <SketchPicker
+            color={cardColor}
+            onChangeComplete={handleChangeComplete}
+          />
+        </div>
+      )}
+      <div className="flex ">
+        <div>
+          <label
+            onClick={() => setShowTextPicker(!showTextPicker)}
+            htmlFor="text-color"
+          >
+            Text Color:
+          </label>
+          {showTextPicker && (
+            <SketchPicker
+              id="text-color"
+              color={textColor}
+              onChangeComplete={handleTextColorChange}
+            />
+          )}
+        </div>
+        <div>
+          <label htmlFor="font-choice">Font Choice:</label>
+          <select
+            id="font-choice"
+            value={fontChoice}
+            onChange={handleFontChoiceChange}
+          >
+            <option value="Arial">Arial</option>
+            <option value="Verdana">Verdana</option>
+            <option value="Helvetica">Helvetica</option>
+            <option value="Times New Roman">Times New Roman</option>
+            {/* Add more font options as needed */}
+          </select>
+        </div>
       </div>
     </div>
   );
