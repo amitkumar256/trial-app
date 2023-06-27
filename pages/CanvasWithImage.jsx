@@ -11,7 +11,7 @@ function CanvasWithImage() {
   const [showPicker, setShowPicker] = useState(false);
   const [showTextPicker, setShowTextPicker] = useState(false);
 
-  const [cardColor, setCardColor] = useState("#ffffff");
+  const [cardColor, setCardColor] = useState("#000000");
   const handleChangeComplete = (color) => {
     setCardColor(color.hex);
   };
@@ -39,8 +39,8 @@ function CanvasWithImage() {
 
   useEffect(() => {
     const canvas = new fabric.Canvas(canvasRef.current, {
-      width: 800,
-      height: 600,
+      width: 400,
+      height: 300,
     });
 
     canvasInstanceRef.current = canvas;
@@ -68,8 +68,8 @@ function CanvasWithImage() {
         const maxHeight = canvas.getHeight();
 
         const aspectRatio = img.width / img.height;
-        let width = maxWidth;
-        let height = maxWidth / aspectRatio;
+        let width = maxWidth / 4;
+        let height = maxWidth / 4;
 
         if (height > maxHeight) {
           height = maxHeight;
@@ -96,9 +96,9 @@ function CanvasWithImage() {
   const addText = () => {
     const canvas = canvasInstanceRef.current;
     const text = new fabric.Textbox("Your Text", {
-      left: canvas.getWidth() / 2,
-      top: canvas.getHeight() / 2,
-      fontSize: 20,
+      left: canvas.getWidth() / 3,
+      top: canvas.getHeight() / 3,
+      fontSize: 12,
       fill: textColor, // Set text color
       fontFamily: fontChoice, // Set font family
       borderColor: textColor, // Set border color
@@ -198,59 +198,62 @@ function CanvasWithImage() {
         handleParentClick(event);
         handleTextClick(event);
       }}
-      className=""
+      className="  flex md:flex-row flex-col justify-center items-center h-screen gap-10 "
     >
-      <div className="flex gap-5">
-        <button className="bg-red-500 text-white" onClick={deleteImage}>
+      <div
+        className="rounded-xl"
+        style={{
+          backgroundColor: cardColor,
+          width: "400px",
+          height: "300px",
+          overflow: "hidden", // Hide overflow from the container
+        }}
+      >
+        <canvas ref={canvasRef} height={300} width={400} />
+      </div>
+      <div className="px-5 py-4 ">
+        <button className="bg-red-500 text-white mx-4" onClick={deleteImage}>
           Delete Image
         </button>
         <button className="bg-red-500 text-white" onClick={deleteText}>
           Delete Text
         </button>
-      </div>
-
-      <div
-        className=""
-        style={{
-          backgroundColor: cardColor,
-          width: "800px",
-          height: "600px",
-          overflow: "hidden", // Hide overflow from the container
-        }}
-      >
-        <canvas ref={canvasRef} />
-      </div>
-      <input className="" type="file" onChange={handleImageUpload} />
-      <button onClick={() => setShowPicker(!showPicker)}>Color Picker</button>
-      <button onClick={addText}>Add Text</button>
-      {showPicker && (
-        <div className="absolute bottom-0 right-0" ref={colorPickerRef}>
-          <SketchPicker
-            color={cardColor}
-            onChangeComplete={handleChangeComplete}
-          />
-        </div>
-      )}
-      <div className="flex ">
-        <div>
-          <label
-            onClick={() => setShowTextPicker(!showTextPicker)}
-            htmlFor="text-color"
-          >
-            Text Color:
-          </label>
-          {showTextPicker && (
-            <div
-              className="absolute right-[250px] bottom-0"
-              ref={textPickerRef}
-            >
+        <input className="" type="file" onChange={handleImageUpload} />
+        <div className="flex gap-4">
+          <button onClick={() => setShowPicker(!showPicker)}>
+            Color Picker
+          </button>
+          <button onClick={addText}>Add Text</button>
+          {showPicker && (
+            <div className="absolute bottom-0 right-0" ref={colorPickerRef}>
               <SketchPicker
-                id="text-color"
-                color={textColor}
-                onChangeComplete={handleTextColorChange}
+                color={cardColor}
+                onChangeComplete={handleChangeComplete}
               />
             </div>
           )}
+          <div className="flex ">
+            <div>
+              <label
+                onClick={() => setShowTextPicker(!showTextPicker)}
+                htmlFor="text-color"
+              >
+                Text Color:
+              </label>
+              {showTextPicker && (
+                <div
+                  className="absolute right-[250px] bottom-0"
+                  ref={textPickerRef}
+                >
+                  <SketchPicker
+                    id="text-color"
+                    color={textColor}
+                    onChangeComplete={handleTextColorChange}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
         </div>
         <div>
           <label htmlFor="font-choice">Font Choice:</label>
