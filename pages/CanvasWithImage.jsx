@@ -187,7 +187,6 @@ function CanvasWithImage() {
       }
     }
   };
-  const [imageSelected, setImageSelected] = useState(false);
 
   return (
     <div
