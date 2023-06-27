@@ -187,6 +187,7 @@ function CanvasWithImage() {
       }
     }
   };
+  const [imageSelected, setImageSelected] = useState(false);
 
   return (
     <div
@@ -214,14 +215,7 @@ function CanvasWithImage() {
           overflow: "hidden", // Hide overflow from the container
         }}
       >
-        <canvas
-          ref={canvasRef}
-          style={{
-            position: "", // Position the canvas absolutely within the container
-            top: "0",
-            left: "0",
-          }}
-        />
+        <canvas ref={canvasRef} />
       </div>
       <input className="" type="file" onChange={handleImageUpload} />
       <button onClick={() => setShowPicker(!showPicker)}>Color Picker</button>
