@@ -144,6 +144,10 @@ function CanvasWithImage() {
     if (fabricImg) {
       canvas.remove(fabricImg);
       fabricImgRef.current = null;
+      const fileInput = document.querySelector('input[type="file"]');
+      if (fileInput) {
+        fileInput.value = "";
+      }
       canvas.renderAll();
     }
   };
@@ -259,7 +263,6 @@ function CanvasWithImage() {
             <option value="Verdana">Verdana</option>
             <option value="Helvetica">Helvetica</option>
             <option value="Times New Roman">Times New Roman</option>
-            {/* Add more font options as needed */}
           </select>
         </div>
       </div>
