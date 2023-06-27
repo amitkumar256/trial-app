@@ -1,8 +1,4 @@
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
-});
-
-module.exports = withBundleAnalyzer({
+module.exports = {
   webpack: (config, { isServer }) => {
     // Exclude canvas package from being processed by webpack
     if (!isServer) {
@@ -20,4 +16,4 @@ module.exports = withBundleAnalyzer({
     }`,
   },
   reactStrictMode: true,
-});
+};
