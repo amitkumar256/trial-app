@@ -1,9 +1,9 @@
 import dynamic from "next/dynamic";
 
-const NoSSRComponent = dynamic(() => import("../components/Tests"), {
+const NoSSRComponent = dynamic(() => import("../components/Test"), {
   ssr: false,
 });
 
-export default function TestsPage(props) {
+export default function UseKonva(props) {
   return <NoSSRComponent />;
 }

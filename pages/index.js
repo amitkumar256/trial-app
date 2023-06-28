@@ -4,6 +4,8 @@ import Navbar from '@/components/Navbar'
 import SuperSimpleOne from '@/components/SuperSimpleOne'
 import SuperTwo from '@/components/SuperTwo'
 import SuperSimpleThree from '@/components/SuperSimpleThree'
+import UseKonva from './UseKonva'
+
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -13,7 +15,10 @@ export default function Home() {
     {/* <Navbar/> */}
     {/* <SuperSimpleOne/> */}
     {/* <SuperTwo/> */}
-    <SuperSimpleThree/>
+    {/* <SuperSimpleThree/> */}
+    <UseKonva/>
+      
+    
    </div>
   )
 }
