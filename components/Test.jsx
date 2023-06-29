@@ -8,6 +8,7 @@ function Test() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [textNodes, setTextNodes] = useState([]);
   const [inputText, setInputText] = useState("");
+  const [selectedFont, setSelectedFont] = useState("Arial");
 
   useEffect(() => {
     if (selectedImage) {
@@ -73,6 +74,7 @@ function Test() {
       x: 20,
       y: 20,
       text: inputText,
+      fontFamily: selectedFont, // Set the selected font
     });
 
     setTextNodes([...textNodes, textNode]);
@@ -81,6 +83,10 @@ function Test() {
 
   const handleInputChange = (event) => {
     setInputText(event.target.value);
+  };
+
+  const handleFontChange = (event) => {
+    setSelectedFont(event.target.value);
   };
 
   return (
@@ -92,6 +98,12 @@ function Test() {
         onChange={handleInputChange}
         placeholder="Enter text"
       />
+      <select value={selectedFont} onChange={handleFontChange}>
+        <option value="Arial">Arial</option>
+        <option value="Helvetica">Helvetica</option>
+        <option value="Times New Roman">Times New Roman</option>
+        {/* Add more font options as needed */}
+      </select>
       <button onClick={handleAddText}>Add Text</button>
       <div className="bg-red-200" style={{ width: 400, height: 300 }}>
         <Stage
@@ -135,6 +147,7 @@ function Test() {
                   transformerRef.current.nodes([e.target]);
                   transformerRef.current.getLayer().batchDraw();
                 }}
+                fontFamily={textNode.fontFamily()} // Set the font family of the text
               />
             ))}
             <Transformer ref={transformerRef} />
