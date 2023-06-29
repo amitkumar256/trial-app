@@ -87,7 +87,17 @@ function Test() {
   };
 
   const handleFontChange = (event) => {
-    setSelectedFont(event.target.value);
+    const newFont = event.target.value;
+    setSelectedFont(newFont);
+
+    if (transformerRef.current.nodes().length > 0) {
+      const selectedNode = transformerRef.current.nodes()[0];
+
+      if (selectedNode instanceof window.Konva.Text) {
+        selectedNode.setAttrs({ fontFamily: newFont });
+        stageRef.current.batchDraw();
+      }
+    }
   };
 
   return (
