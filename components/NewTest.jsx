@@ -89,6 +89,9 @@ function Test() {
       if (clickedTextIndex !== -1) {
         setSelectedTextIndex(clickedTextIndex);
         setTextColor(textNodes[clickedTextIndex].fill());
+      } else {
+        setSelectedTextIndex(-1);
+        setTextColor("#ffffff");
       }
     }
   };
@@ -246,11 +249,14 @@ function Test() {
                   e.cancelBubble = true; // Prevent bubbling up to stage
                   transformerRef.current.nodes([e.target]);
                   transformerRef.current.getLayer().batchDraw();
+                  setSelectedTextIndex(index); // Set the selected text node index
+                  setTextColor(textNode.fill()); // Set the text color to the selected text color
                 }}
                 fontFamily={textNode.fontFamily()} // Set the font family of the text
                 fill={selectedTextIndex === index ? textColor : textNode.fill()} // Use the selected text color if it matches the index
               />
             ))}
+
             <Transformer ref={transformerRef} />
           </Layer>
         </Stage>
