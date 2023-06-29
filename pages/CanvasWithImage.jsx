@@ -111,8 +111,8 @@
 //     canvas.setActiveObject(text);
 //     canvas.renderAll();
 //   };
-//   const handleTextColorChange = (color) => {
-//     setTextColor(color.hex);
+// const handleTextColorChange = (color) => {
+//   setTextColor(color.hex);
 //     const canvas = canvasInstanceRef.current;
 //     const activeObject = canvas.getActiveObject();
 
