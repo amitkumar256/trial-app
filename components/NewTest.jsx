@@ -250,8 +250,6 @@ function Test() {
                   e.cancelBubble = true; // Prevent bubbling up to stage
                   transformerRef.current.nodes([e.target]);
                   transformerRef.current.getLayer().batchDraw();
-                  setSelectedTextIndex(index); // Set the selected text node index
-                  setTextColor(textNode.fill()); // Set the text color to the selected text color
                 }}
                 width={selectedImage.width}
                 height={selectedImage.height}
