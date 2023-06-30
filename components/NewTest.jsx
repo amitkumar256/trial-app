@@ -147,6 +147,14 @@ function Test() {
       setShowPicker(false);
     }
   };
+  const handleTextClick = (e) => {
+    if (
+      showTextPicker &&
+      (!textPickerRef.current || !textPickerRef.current.contains(e.target))
+    ) {
+      setShowTextPicker(false);
+    }
+  };
   const [textColor, setTextColor] = useState("#ffffff");
   const [showTextPicker, setShowTextPicker] = useState(false);
   const textPickerRef = useRef();
@@ -162,49 +170,60 @@ function Test() {
   };
 
   return (
-    <div onClick={handleParentClick}>
-      <input id="file-input" type="file" onChange={handleFileChange} />
-      <button onClick={() => setShowPicker(!showPicker)}>color picker</button>
-      {showPicker && (
-        <div className="absolute bottom-0 right-0 " ref={colorPickerRef}>
-          <SketchPicker
-            color={cardColor}
-            onChangeComplete={handleChangeComplete}
-          />
-        </div>
-      )}
-      <input
-        type="text"
-        value={inputText}
-        onChange={handleInputChange}
-        placeholder="Enter text"
-      />
+    <div
+      onClick={(event) => {
+        handleParentClick(event);
+        handleTextClick(event);
+      }}
+      className="flex justify-center items-center h-screen"
+    >
       <div>
-        <label
-          onClick={() => setShowTextPicker(!showTextPicker)}
-          htmlFor="text-color"
-        >
-          Text Color:
-        </label>
-        {showTextPicker && (
-          <div className="absolute right-[250px] bottom-0" ref={textPickerRef}>
+        <input id="file-input" type="file" onChange={handleFileChange} />
+        <button onClick={() => setShowPicker(!showPicker)}>color picker</button>
+        {showPicker && (
+          <div className="absolute bottom-0 right-0 " ref={colorPickerRef}>
             <SketchPicker
-              id="text-color"
-              color={textColor}
-              onChangeComplete={handleTextColorChange}
+              color={cardColor}
+              onChangeComplete={handleChangeComplete}
             />
           </div>
         )}
+        <input
+          type="text"
+          value={inputText}
+          onChange={handleInputChange}
+          placeholder="Enter text"
+        />
+        <div>
+          <label
+            onClick={() => setShowTextPicker(!showTextPicker)}
+            htmlFor="text-color"
+          >
+            Text Color:
+          </label>
+          {showTextPicker && (
+            <div
+              className="absolute right-[0px] bottom-[250px]"
+              ref={textPickerRef}
+            >
+              <SketchPicker
+                id="text-color"
+                color={textColor}
+                onChangeComplete={handleTextColorChange}
+              />
+            </div>
+          )}
+        </div>
+        <select value={selectedFont} onChange={handleFontChange}>
+          <option value="Arial">Arial</option>
+          <option value="Helvetica">Helvetica</option>
+          <option value="Times New Roman">Times New Roman</option>
+          {/* Add more font options as needed */}
+        </select>
+        <button onClick={handleAddText}>Add Text</button>
       </div>
-      <select value={selectedFont} onChange={handleFontChange}>
-        <option value="Arial">Arial</option>
-        <option value="Helvetica">Helvetica</option>
-        <option value="Times New Roman">Times New Roman</option>
-        {/* Add more font options as needed */}
-      </select>
-      <button onClick={handleAddText}>Add Text</button>
       <div
-        className=""
+        className="rounded-xl"
         style={{ background: cardColor, width: 400, height: 300 }}
       >
         <Stage

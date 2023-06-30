@@ -28,14 +28,14 @@
 //       setShowPicker(false);
 //     }
 //   };
-//   const handleTextClick = (e) => {
-//     if (
-//       showTextPicker &&
-//       (!textPickerRef.current || !textPickerRef.current.contains(e.target))
-//     ) {
-//       setShowTextPicker(false);
-//     }
-//   };
+// const handleTextClick = (e) => {
+//   if (
+//     showTextPicker &&
+//     (!textPickerRef.current || !textPickerRef.current.contains(e.target))
+//   ) {
+//     setShowTextPicker(false);
+//   }
+// };
 
 //   useEffect(() => {
 //     const canvas = new fabric.Canvas(canvasRef.current, {
@@ -194,10 +194,10 @@
 
 //   return (
 //     <div
-//       onClick={(event) => {
-//         handleParentClick(event);
-//         handleTextClick(event);
-//       }}
+// onClick={(event) => {
+//   handleParentClick(event);
+//   handleTextClick(event);
+// }}
 //       className="  flex md:flex-row flex-col justify-center items-center h-screen gap-10 "
 //     >
 //       <div
